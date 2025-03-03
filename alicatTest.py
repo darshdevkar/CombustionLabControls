@@ -12,14 +12,12 @@ async def get():
     controllers = {}
     
     try:
-        async with FlowController(flowcontroller_port) as MFC:
-            for addr in flowcontroller_addresses:
-                controllers[addr] = MFC
-                print(f"Flow Controller {addr} connected on {flowcontroller_port}")
-            
-            readings = await MFC.get()
-            print("Initial readings:", readings)
-            return controllers
+        for addr in flowcontroller_addresses:
+          async with FlowController(address=flowcontroller_port, unit=addr) as MFC:
+              print(f"Flow Controller {addr} connected on {flowcontroller_port}")
+              print("Initial readings:", await MFC.get())
+              controllers[addr] = MFC
+        return controllers
     except Exception as e:
         print(f"Error connecting to flow controllers: {e}")
         return None
@@ -49,7 +47,8 @@ async def get_gui_settings():
 
 async def main():
     controllers = await get()
-    settings = await get_gui_settings()
-    await set(controllers, settings)
+    input("Press Enter to close...")
+    #settings = await get_gui_settings()
+    #await set(controllers, settings)
 
 asyncio.run(main())
