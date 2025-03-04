@@ -46,8 +46,8 @@ class CombustionChamberGUI:
             self.buttons.append(button)
         self.controls_frame = tk.Frame(self.main_frame)
         self.controls_frame.pack(side="left", fill="y", padx=10, pady=10)
-        self.update_button = ttk.Button(self.controls_frame, text="Manually Update Readouts", command=self.update_readouts)
-        self.update_button.pack(pady=10)
+        #self.update_button = ttk.Button(self.controls_frame, text="Manually Update Readouts", command=self.update_readouts)
+        #self.update_button.pack(pady=10)
         self.create_gas_inputs()
         self.update_values_loop()
 
