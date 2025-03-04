@@ -3,6 +3,15 @@ from tkinter import ttk
 import random
 
 def get_gui_settings():
+    defaults = """
+    Default Mass Flow Parameters:
+
+    "A": {"gas": "C2H2", "setpoint": 6.0, "unit": "SLPM"},
+    "B": {"gas": "H2", "setpoint": 12.0, "unit": "SLPM"},
+    "C": {"gas": "O2", "setpoint": 8.5, "unit": "SLPM"},
+    "D": {"gas": "N2", "setpoint": 10.0, "unit": "SLPM"},
+    """
+    print(defaults)
     return {
         "A": {"gas": "C2H2", "setpoint": 6.0, "unit": "SLPM"},
         "B": {"gas": "H2", "setpoint": 12.0, "unit": "SLPM"},
