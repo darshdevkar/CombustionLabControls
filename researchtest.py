@@ -6,17 +6,17 @@ def get_gui_settings():
     defaults = """
     Default Mass Flow Parameters:
 
-    "A": {"gas": "C2H2", "setpoint": 6.0, "unit": "SLPM"},
-    "B": {"gas": "H2", "setpoint": 12.0, "unit": "SLPM"},
-    "C": {"gas": "O2", "setpoint": 8.5, "unit": "SLPM"},
-    "D": {"gas": "N2", "setpoint": 10.0, "unit": "SLPM"},
+    "A": {"gas": "C2H2", "setpoint": 0.0, "unit": "SLPM"},
+    "B": {"gas": "H2", "setpoint": 0.0, "unit": "SLPM"},
+    "C": {"gas": "O2", "setpoint": 0.0, "unit": "SLPM"},
+    "D": {"gas": "N2", "setpoint": 0.0, "unit": "SLPM"},
     """
     print(defaults)
     return {
-        "A": {"gas": "C2H2", "setpoint": 6.0, "unit": "SLPM"},
-        "B": {"gas": "H2", "setpoint": 12.0, "unit": "SLPM"},
-        "C": {"gas": "O2", "setpoint": 8.5, "unit": "SLPM"},
-        "D": {"gas": "N2", "setpoint": 10.0, "unit": "SLPM"},
+        "A": {"gas": "C2H2", "setpoint": 0.0, "unit": "SLPM"},
+        "B": {"gas": "H2", "setpoint": 0.0, "unit": "SLPM"},
+        "C": {"gas": "O2", "setpoint": 0.0, "unit": "SLPM"},
+        "D": {"gas": "N2", "setpoint": 0.0, "unit": "SLPM"},
     }
 
 class CombustionChamberGUI:
@@ -70,6 +70,8 @@ class CombustionChamberGUI:
         arrow_state = solenoid['switch_state'] if solenoid['arrow_default'] else not solenoid['switch_state']
         self.draw_arrow(solenoid['x0'], solenoid['y0'], solenoid['size'], solenoid['orient'], arrow_state, index, solenoid['arrow_orient'])
         print(f"Solenoid {index} switch_state: {solenoid['switch_state']}")
+        self.get_solenoid_states()
+
 
     def draw_sections(self):
         self.canvas.create_rectangle(20, 250, 150, 450, outline="black", width=2)
@@ -229,10 +231,10 @@ class CombustionChamberGUI:
         self.setpoint_vars = {}
         self.unit_vars = {}
         gas_options = ['Air', 'Ar', 'CH4', 'CO', 'CO2', 'C2H6', 'H2', 'He',
-                             'N2', 'N2O', 'Ne', 'O2', 'C3H8', 'n-C4H10', 'C2H2',
-                             'C2H4', 'i-C2H10', 'Kr', 'Xe', 'SF6', 'C-25', 'C-10',
-                             'C-8', 'C-2', 'C-75', 'A-75', 'A-25', 'A1025', 'Star29',
-                             'P-5']
+                       'N2', 'N2O', 'Ne', 'O2', 'C3H8', 'n-C4H10', 'C2H2',
+                       'C2H4', 'i-C2H10', 'Kr', 'Xe', 'SF6', 'C-25', 'C-10',
+                       'C-8', 'C-2', 'C-75', 'A-75', 'A-25', 'A1025', 'Star29',
+                       'P-5']
         settings = get_gui_settings()
         row = 0
         ttk.Label(self.gas_frame, text="Label").grid(row=row, column=0, padx=5, pady=5)
@@ -257,6 +259,9 @@ class CombustionChamberGUI:
             row += 1
         save_btn = ttk.Button(self.gas_frame, text="Save Gas Settings", command=self.save_gas_settings)
         save_btn.grid(row=row, column=0, columnspan=4, pady=10)
+        # New Reset Button to zero only the 4 mass flow controllers (A, B, C, D)
+        reset_btn = ttk.Button(self.gas_frame, text="Reset Mass Flow", command=self.reset_mass_flow)
+        reset_btn.grid(row=row+1, column=0, columnspan=4, pady=10)
 
     def save_gas_settings(self):
         print("Saved!")
@@ -265,6 +270,26 @@ class CombustionChamberGUI:
             setpoint = self.setpoint_vars[label].get()
             unit = self.unit_vars[label].get()
             print(f"{label}: {{'gas': '{gas}', 'setpoint': {setpoint}, 'unit': '{unit}'}}")
+        print("")
+
+    def reset_mass_flow(self):
+        self.setpoint_vars['A'].set(0.0)
+        self.setpoint_vars['B'].set(0.0)
+        self.setpoint_vars['C'].set(0.0)
+        self.setpoint_vars['D'].set(0.0)
+        print("Mass flow controllers reset")
+        for label in self.gas_vars.keys():
+            gas = self.gas_vars[label].get()
+            setpoint = self.setpoint_vars[label].get()
+            unit = self.unit_vars[label].get()
+            print(f"{label}: {{'gas': '{gas}', 'setpoint': {setpoint}, 'unit': '{unit}'}}")
+        print("")
+
+    def get_solenoid_states(self):
+        states = [s['switch_state'] for s in self.solenoids]
+        print("Solenoid States:", states)
+        return states
+
 
 if __name__ == "__main__":
     root = tk.Tk()
