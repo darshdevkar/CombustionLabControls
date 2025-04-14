@@ -3,6 +3,15 @@ from tkinter import ttk
 import random
 
 def get_gui_settings():
+    defaults = """
+    Default Mass Flow Parameters:
+
+    "A": {"gas": "C2H2", "setpoint": 6.0, "unit": "SLPM"},
+    "B": {"gas": "H2", "setpoint": 12.0, "unit": "SLPM"},
+    "C": {"gas": "O2", "setpoint": 8.5, "unit": "SLPM"},
+    "D": {"gas": "N2", "setpoint": 10.0, "unit": "SLPM"},
+    """
+    print(defaults)
     return {
         "A": {"gas": "C2H2", "setpoint": 6.0, "unit": "SLPM"},
         "B": {"gas": "H2", "setpoint": 12.0, "unit": "SLPM"},
@@ -46,8 +55,8 @@ class CombustionChamberGUI:
             self.buttons.append(button)
         self.controls_frame = tk.Frame(self.main_frame)
         self.controls_frame.pack(side="left", fill="y", padx=10, pady=10)
-        self.update_button = ttk.Button(self.controls_frame, text="Manually Update Readouts", command=self.update_readouts)
-        self.update_button.pack(pady=10)
+        #self.update_button = ttk.Button(self.controls_frame, text="Manually Update Readouts", command=self.update_readouts)
+        #self.update_button.pack(pady=10)
         self.create_gas_inputs()
         self.update_values_loop()
 
