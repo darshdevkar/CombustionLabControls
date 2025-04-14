@@ -51,6 +51,7 @@ async def main():
     await get()
     settings = await get_gui_settings()
     time.sleep(3)
+    input("press Enter to set...")
     print("setting...")
     await set(settings)
     time.sleep(3)
