@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 import random
+import nidaqOutputTest
 
 def get_gui_settings():
     defaults = """
